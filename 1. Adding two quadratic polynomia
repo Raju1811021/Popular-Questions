@@ -1,0 +1,52 @@
+#include<iostream>
+#include<list>
+#include<vector>
+using namespace std;
+struct term
+{
+    int constant;
+    char variable;
+    int power;
+};
+struct polynomial
+{
+    term deg2,deg1,deg0;
+};
+list<polynomial> AddPoly(list<polynomial> &l);
+
+int main()
+{
+    polynomial p1,p2;
+    p1.deg2.constant=1;p1.deg2.variable='x';p1.deg2.power=2;
+    p1.deg1.constant=3;p1.deg1.variable='x';p1.deg1.power=1;
+    p1.deg0.constant=2;p1.deg0.variable='x';p1.deg0.power=0;
+    //for p2
+    p2.deg2.constant=1;p2.deg2.variable='x';p2.deg2.power=2;
+    p2.deg1.constant=3;p2.deg1.variable='x';p2.deg1.power=1;
+    p2.deg0.constant=2;p2.deg0.variable='x';p2.deg0.power=0;
+    list<polynomial> l1={p1,p2};
+    l1=AddPoly(l1);
+    p1=l1.front();
+    cout<<"After Addition : ";
+    cout<<p1.deg2.constant<<p1.deg2.variable<<"^"<<p1.deg2.power<<"  "<<"+"<<"  ";
+    cout<<p1.deg1.constant<<p1.deg1.variable<<"  "<<"+"<<"  ";
+    cout<<p1.deg0.constant<<"  "<<endl;
+    return 0;
+}
+list<polynomial> AddPoly(list<polynomial> &l){
+    polynomial p1=l.front(),p2=l.back(),p3;
+    //term1
+    p3.deg2.constant=p1.deg2.constant+p2.deg2.constant;
+    p3.deg2.variable=p1.deg2.variable;
+    p3.deg2.power=p1.deg2.power;
+    //term2
+    p3.deg1.constant=p1.deg1.constant+p2.deg1.constant;
+    p3.deg1.variable=p1.deg1.variable;
+    p3.deg1.power=p1.deg1.power;
+    //term3
+    p3.deg0.constant=p1.deg0.constant+p2.deg0.constant;
+    p3.deg0.variable=p1.deg0.variable;
+    p3.deg0.power=p1.deg0.power;
+    list<polynomial> l1={p3};
+    return l1;
+}
