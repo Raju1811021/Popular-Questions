@@ -1,0 +1,162 @@
+/**********
+ 
+ Following is the main function we are using internally.
+ Refer this for completing the Dequeue class.
+ 
+ 
+ int main()
+ {
+ Deque dq(10);
+ int choice,input;
+ while(true) {
+ cin >> choice;
+ switch (choice) {
+ case 1:
+ cin >> input;
+ dq.insertfront(input);
+ break;
+ case 2:
+ cin >> input;
+ dq.insertrear(input);
+ break;
+ case 3:
+ dq.deletefront();
+ break;
+ case 4:
+ dq.deleterear();
+ break;
+ case 5:
+ cout << dq.getFront() << "\n";
+ break;
+ case 6:
+ cout << dq.getRear() << "\n";
+ break;
+ default:
+ return 0;
+ }
+ }
+ 
+ return 0;
+ }
+ 
+ ************/
+
+
+class Deque {
+    // Complete this class
+    private:
+    	int capacity;
+    	int size;
+    	int front;
+    	int rear;
+    	int *arr;
+    public:
+    Deque(int s){
+        arr=new int[s];
+        front=-1;
+        rear=-1;
+        capacity=s;
+        size=0;
+    }
+    void insertFront(int input){
+        if(size==capacity){
+            cout<<-1<<endl;
+            return;
+        }
+        if(size==0){
+            front++;
+            rear++;
+            arr[front]=input;
+            size++;
+            return;
+        }
+        if(front>0){
+            front--;
+            arr[front]=input;
+            size++;
+            return;
+        }
+        if(front==0){
+            rear++;
+            for(int i=rear;i>=front+1;i--){
+                arr[i]=arr[i-1];
+            }
+            arr[front]=input;
+            size++;
+            return;
+        }
+        
+    }
+    void insertRear(int input){
+        if(size==capacity){
+            cout<<-1<<endl;
+            return;
+        }
+        size++;
+        rear=(rear+1)%capacity;
+        arr[rear]=input;
+        if(front==-1){
+            front++;
+        }
+        return;
+    }
+    void deleteFront(){
+        if(size==0){
+            cout<<-1<<endl;
+            return;
+        }
+        if(front==rear){
+            front=-1;
+            rear=-1;
+            size--;
+            return;
+        }
+        front=(front+1)%capacity;
+        size--;
+    }
+    void deleteRear(){
+        if(size==0){
+            cout<<-1<<endl;
+            return;
+        }
+        size--;
+        if(front==rear){
+            front=-1;
+            rear=-1;
+            return;
+        }
+        if(rear==0){
+            rear=capacity-1;
+            return;
+        }
+        rear--;  
+        
+    }
+    int getFront(){
+        if(size==0){
+            return -1;
+        }
+        return arr[front];
+    }
+    int getRear(){
+        if(size==0){
+            return -1;
+        }
+        return arr[rear];
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
