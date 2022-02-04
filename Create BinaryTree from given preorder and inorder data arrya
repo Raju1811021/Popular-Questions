@@ -1,0 +1,53 @@
+/***********************************************************
+	Following is the Binary Tree Node class structure
+
+	template <typename T>
+	class BinaryTreeNode {
+    	public : 
+    	T data;
+    	BinaryTreeNode<T> *left;
+    	BinaryTreeNode<T> *right;
+
+    	BinaryTreeNode(T data) {
+        	this -> data = data;
+        	left = NULL;
+        	right = NULL;
+    	}
+	};
+
+***********************************************************/
+BinaryTreeNode<int>* helper(int *preorder,int *inorder,int ps,int pe,int is,int ie){
+    if(pe-ps+1<=0){
+        return NULL;
+    }
+    BinaryTreeNode<int> *root=new BinaryTreeNode<int>(preorder[ps]);
+    int mid=is;
+    for(int i=is;i<=ie;i++){
+        if(inorder[i]==preorder[ps]){
+            mid=i;
+        }
+    }
+    BinaryTreeNode<int> *left=helper(preorder,inorder,ps+1,ps+(mid-is),is,mid-1);
+    BinaryTreeNode<int> *right=helper(preorder,inorder,ps+(mid-is)+1,pe,mid+1,ie);
+    root->left=left;
+    root->right=right;
+    return root;
+}
+
+BinaryTreeNode<int>* buildTree(int *preorder, int preLength, int *inorder, int inLength) {
+    // Write your code here
+    if(preLength==0){
+        return NULL;
+    }
+    return helper(preorder,inorder,0,preLength-1,0,inLength-1);
+}
+
+
+
+
+
+
+
+
+
+
