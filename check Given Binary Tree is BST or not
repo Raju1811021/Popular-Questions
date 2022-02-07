@@ -1,0 +1,83 @@
+#include<limits.h>
+/**********************************************************
+	Following is the Binary Tree Node class structure
+
+	template <typename T>
+	class BinaryTreeNode {
+    	public : 
+    	T data;
+    	BinaryTreeNode<T> *left;
+    	BinaryTreeNode<T> *right;
+
+    	BinaryTreeNode(T data) {
+        	this -> data = data;
+        	left = NULL;
+        	right = NULL;
+    	}
+	};
+
+***********************************************************/
+/* Approach O(n^2)
+int minimum(BinaryTreeNode<int> *root){
+    if(root==NULL){
+        return INT_MAX;
+    }
+    return min(root->data,min(minimum(root->left),minimum(root->right)));
+}
+int maximum(BinaryTreeNode<int> *root){
+    if(root==NULL){
+        return INT_MIN;
+    }
+    return max(root->data,max(maximum(root->left),maximum(root->right)));
+}
+
+bool isBST(BinaryTreeNode<int> *root) {
+	// Write your code here
+    if(root==NULL){
+        return true;
+    }
+    int leftmax=maximum(root->left);
+    int rightmin=minimum(root->right);
+    if(leftmax<root->data && rightmin>=root->data && isBST(root->left) && isBST(root->right)){
+        return true;
+    }
+    return false;
+    
+}
+*/
+//Approach O(n)
+class triple{
+  public:
+    bool isbst;
+    int Min;
+    int Max;
+    triple(bool isbst,int mi=INT_MAX,int mx=INT_MIN){
+        this->isbst=isbst;
+    	Min=mi;
+        Max=mx;
+    }
+};
+triple helper(BinaryTreeNode<int> *root){
+    if(root==NULL){
+        triple t(true);
+        return t;
+    }
+    triple leftans=helper(root->left);
+    triple rightans=helper(root->right);
+    int Min=min(root->data,min(leftans.Min,rightans.Min));
+    int Max=max(root->data,max(leftans.Max,rightans.Max));
+    if(leftans.Max<root->data && rightans.Min>=root->data && leftans.isbst && rightans.isbst){
+        triple finalans(true,Min,Max);
+        return finalans;
+    }
+    triple finalans(false,Min,Max);
+    return finalans;
+}
+bool isBST(BinaryTreeNode<int> *root) {
+    return helper(root).isbst;
+}
+
+
+
+
+
