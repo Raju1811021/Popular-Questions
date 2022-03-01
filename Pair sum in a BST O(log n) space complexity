@@ -1,0 +1,142 @@
+#include<vector>
+#include<stack>
+/**********************************************************
+
+	Following is the Binary Tree Node class structure
+
+	template <typename T>
+	class BinaryTreeNode {
+    	public: 
+    	T data;
+    	BinaryTreeNode<T> *left;
+    	BinaryTreeNode<T> *right;
+
+    	BinaryTreeNode(T data) {
+        	this->data = data;
+        	left = NULL;
+        	right = NULL;
+    	}
+	};
+	
+***********************************************************/
+/* Approach 1 // O(n) space.
+void makeArray(BinaryTreeNode<int> *root,vector<int> &v){
+    if(root==NULL){
+        return;
+    }
+    makeArray(root->left,v);
+    v.push_back(root->data);
+    makeArray(root->right,v);
+}
+void printNodesSumToS(BinaryTreeNode<int> *root, int s) {
+    // Write your code here
+	if(root==NULL)    {
+        return;
+    }
+    vector<int> output;
+    makeArray(root,output);
+    int left=0,right=output.size()-1;
+    while(left<right){
+        int sum=output[left]+output[right];
+        if(sum>s){
+            right--;
+        }
+        else if(sum<s){
+            left++;
+        }
+        else{
+            cout<<output[left]<<' '<<output[right]<<endl;
+            left++;
+        }
+    }
+}
+*/
+//approach 2 // O(log n) space
+void pushLeft(stack<BinaryTreeNode<int>*> &s,BinaryTreeNode<int> *root){
+    while(root!=NULL){
+        s.push(root);
+        root=root->left;
+    }
+}
+void pushRight(stack<BinaryTreeNode<int>*> &s,BinaryTreeNode<int> *root){
+    while(root!=NULL){
+        s.push(root);
+        root=root->right;
+    }
+}
+int count(BinaryTreeNode<int> *root){
+    if(root==NULL){
+        return 0;
+    }
+    return count(root->left)+count(root->right)+1;
+}
+void printNodesSumToS(BinaryTreeNode<int> *root, int s) {
+    if(root==NULL){
+        return;
+    }
+    stack<BinaryTreeNode<int>*> smaller,greater;
+    //pushing complete left subtree
+    pushLeft(smaller,root);
+    //pushing complete right subtree
+    pushRight(greater,root);
+    // After first pushing
+    int total=count(root);
+    int k=0;
+    while(k<total-1){
+        int small=smaller.top()->data,big=greater.top()->data;
+        if(small+big==s){
+            cout<<small<<' '<<big<<endl;
+            BinaryTreeNode<int> *top=smaller.top();
+            smaller.pop();
+            k++;
+            if(top->right!=NULL){
+                pushLeft(smaller,top->right);
+            }
+            top=greater.top();
+            greater.pop();
+            k++;
+            if(top->left!=NULL){
+                pushRight(greater,top->left);
+            }
+        }
+        else if(small+big>s){
+            BinaryTreeNode<int> *top=greater.top();
+            greater.pop();
+            k++;
+            if(top->left!=NULL){
+                pushRight(greater,top->left);
+            }
+        }
+        else{
+            BinaryTreeNode<int> *top=smaller.top();
+            smaller.pop();
+            k++;
+            if(top->right!=NULL){
+                pushLeft(smaller,top->right);
+            }
+        }
+        
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
