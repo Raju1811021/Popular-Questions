@@ -1,0 +1,47 @@
+/*
+	Note:
+	To get all the test cases accepted, make recursive calls in following order: Top, Down, Left, Right.
+	This means that if the current cell is (x, y), then order of calls should be: top cell (x-1, y), 
+	down cell (x+1, y), left cell (x, y-1) and right cell (x, y+1).
+*/
+#include<bits/stdc++.h>
+bool maze[18][18];
+bool solution[18][18]={false};
+
+using namespace std;
+void rate(int n,int row,int col){
+    if(row==n-1 && col==n-1){
+        solution[row][col]=true;
+        for(int i=0;i<n;i++){
+        	for(int j=0;j<n;j++){
+            	cout<<solution[i][j]<<' ';
+        	}
+   	 }
+        solution[row][col]=false;
+        cout<<endl;
+        return;
+    }
+    if(row>=n || row<0 || col>=n || col<0 || maze[row][col]==0 || solution[row][col]==1){
+        return;
+    }
+    solution[row][col]=true;
+    rate(n,row-1,col);
+    rate(n,row+1,col);
+    rate(n,row,col-1);
+    rate(n,row,col+1);
+    solution[row][col]=false;
+    return;
+}
+int main() {
+
+	// Write your code here
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>maze[i][j];
+        }
+    }
+    rate(n,0,0);
+	return 0;
+}
