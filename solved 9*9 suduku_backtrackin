@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+int sudoku[9][9];
+
+bool isSafe(int row,int col,int num){
+    //check row
+    for(int i=0;i<9;i++){
+        if(sudoku[row][i]==num){
+            return false;
+        }
+    }
+    //check colmwise
+    for(int i=0;i<9;i++){
+        if(sudoku[i][col]==num){
+            return false;
+        }
+    }
+    //check 3*3 matrix
+    int rowFactor=row-(row%3);
+    int colFactor=col-(col%3);
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(sudoku[i+rowFactor][j+colFactor]==num){
+                return false;
+            }
+        }
+    }
+    return true;
+    
+}
+bool FindEmptyLocation(int &row,int &col){
+    for(int i=0;i<9;i++){
+        for(int j=0;j<9;j++){
+            if(sudoku[i][j]==0){
+                row=i;
+                col=j;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+bool sudukuSolver(){
+    //find empty cell
+    int row,col;
+    if(FindEmptyLocation(row,col)==false){
+        return true;
+    }
+	for(int i=1;i<=9;i++){
+	    if(isSafe(row,col,i)==true){
+	        sudoku[row][col]=i;
+	        if(sudukuSolver()==true){
+	            return true;
+	        }
+	        sudoku[row][col]=0;
+	    }
+	}
+	return false;
+}
+
+int main() {
+	// your code goes here
+	for(int i=0;i<9;i++){
+	    string input;
+	    cin>>input;
+	    for(int j=0;j<9;j++){
+	        sudoku[i][j]=input[j]-'0';
+	    }
+	}
+	sudukuSolver();
+	for(int i=0;i<9;i++){
+	    for(int j=0;j<9;j++){
+	        cout<<sudoku[i][j];
+	    }
+	    cout<<endl;
+	}
+	return 0;
+}
