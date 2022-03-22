@@ -1,0 +1,45 @@
+//brute force
+// prir first is maxWeight ans second is max values
+pair<int,int>helper(int *weights, int *values, int n, int maxWeight){
+    if(n==0 || maxWeight==0){
+        pair<int,int> ans(0,0);
+        return ans;
+    }
+    pair<int,int> call1=helper(weights+1,values+1,n-1,maxWeight-weights[0]);
+    if(call1.first+weights[0]<=maxWeight){
+        call1.first+=weights[0];
+        call1.second+=values[0];
+    }
+    pair<int,int> call2=helper(weights+1,values+1,n-1,maxWeight);
+    if(call2.second>call1.second){
+        return call2;
+    }
+    return call1;
+    
+}
+/*memoization
+pair<int,int> helper(int* weight, int* value, int n, int maxWeight,int **ans){
+    if(maxWeight<=0 || n==0 ){
+        pair<int,int> output(0,0);
+        return output;
+    }
+    if(ans[maxWeight][n]!=-1){
+        pair<int,int> output(maxWeight,ans[maxWeight][n]);
+        return output;
+    }
+    pair<int,int> call1=helper(weight+1,value+1,n-1,maxWeight-weight[0],ans);
+    if(call1.first+weight[0]<=maxWeight){
+        call1.first+=weight[0];
+        call1.second+=value[0];
+    }
+    pair<int,int> call2=helper(weight+1,value+1,n-1,maxWeight,ans);
+    if(call1.second>call2.second){
+        ans[maxWeight][n]=call1.second;
+        return call1;
+    }
+    else{
+        ans[maxWeight][n]=call2.second;
+        return call2;
+    }
+    
+}
