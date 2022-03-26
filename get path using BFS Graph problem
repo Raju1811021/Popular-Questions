@@ -1,0 +1,67 @@
+#include <iostream>
+#include<queue>
+#include<unordered_map>
+using namespace std;
+void getPath(int **edges,int v,int source,int des,bool *visited){
+    queue<int> ans;
+    unordered_map<int,int> path;
+    ans.push(source);
+    visited[source]=true;
+    while(!ans.empty()){
+        int front=ans.front();
+        if(front==des){
+            break;
+        }
+        ans.pop();
+        for(int i=0;i<v;i++){
+            if(edges[front][i]==1 && visited[i]==false){
+                ans.push(i);
+                visited[i]=true;
+                path[i]=front;
+            }
+        }
+    }
+    if(ans.empty()==true){
+        return;
+    }
+    else{
+        int temp=des;
+        while(temp!=source){
+            cout<<temp<<' ';
+            temp=path[temp];
+        }
+        cout<<temp;
+    }
+}
+int main() {
+    // Write your code here
+    int v,e;
+    cin>>v>>e;
+    int **edges=new int*[v];
+    for(int i=0;i<v;i++){
+        edges[i]=new int[v];
+        for(int j=0;j<v;j++){
+            edges[i][j]=0;
+        }
+    }
+    for(int i=0;i<e;i++){
+        int first,second;
+        cin>>first>>second;
+        edges[first][second]=1;
+        edges[second][first]=1;
+    }
+    bool *visited=new bool[v];
+    for(int i=0;i<v;i++){
+        visited[i]=false;
+    }
+    int v1,v2;
+    cin>>v1>>v2;
+    
+    getPath(edges,v,v1,v2,visited);
+    
+    for(int i=0;i<v;i++){
+        delete [] edges[i];
+    }
+    delete [] edges;
+    delete [] visited;
+}
