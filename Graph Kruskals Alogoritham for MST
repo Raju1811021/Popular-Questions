@@ -1,0 +1,96 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+struct edges{
+    public:
+    int source;
+    int dest;
+    int weight;
+    edges(){}
+    edges(int source,int dest,int weight){
+        this->source=source;
+        this->dest=dest;
+        this->weight=weight;
+    }
+};
+bool compareEdge(edges i1, edges i2)
+{
+    return (i1.weight < i2.weight);
+}
+bool CycleDetection(int *parent,int v,int source,int dest){
+    int S_parent=source,D_parent=dest;
+    // source parent
+    while(parent[S_parent]!=S_parent){
+        S_parent=parent[S_parent];
+    }
+    //destination parent
+    while(parent[D_parent]!=D_parent){
+        D_parent=parent[D_parent];
+    }
+    if(D_parent==S_parent){
+        return true;
+    }
+    else{
+        parent[D_parent]=S_parent;
+        return false;
+    }
+}
+void kruskal(edges *InputGraph,edges *MSTGraph,int *parent,int v,int e){
+    int countEdge=0;
+    int i=0,j=0;
+    while(countEdge!=v-1){
+        struct edges ed=InputGraph[i];
+        if(CycleDetection(parent,v,ed.source,ed.dest)==false){
+            MSTGraph[j]=ed;
+            j++;i++;countEdge++;
+        }
+        else{
+            i++;
+        }
+    }
+}
+int main() {
+    // taken Graph input
+    int v,e;
+    cin>>v>>e;
+    edges *InputGraph=new edges[e];
+    for(int i=0;i<e;i++){
+        int s,d,w;
+        cin>>s>>d>>w;
+        edges eg(s,d,w);
+        InputGraph[i]=eg;
+    }
+    //sort Input Graph
+    sort(InputGraph,InputGraph+e,compareEdge);
+    // array for MST cysle detection
+    int *parent=new int[v];
+    for(int i=0;i<v;i++){
+        parent[i]=i;
+    }
+    //MST GRAPH OUTPUT
+    edges *MSTGraph=new edges[v-1];
+    //kruskals algoritham
+    kruskal(InputGraph,MSTGraph,parent,v,e);
+    //Print MST
+    for(int i=0;i<v-1;i++){
+        if(MSTGraph[i].dest<MSTGraph[i].source){
+            cout<<MSTGraph[i].dest<<' ';
+            cout<<MSTGraph[i].source<<' ';
+        }
+        else{
+            cout<<MSTGraph[i].source<<' ';
+            cout<<MSTGraph[i].dest<<' ';
+        }
+        cout<<MSTGraph[i].weight<<endl;
+    }
+    //deallocate the memory
+    delete [] InputGraph;
+    delete [] MSTGraph;
+	delete [] parent;
+}
+
+
+
+
+
+
